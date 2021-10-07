@@ -1,0 +1,23 @@
+apiVersion: v1
+entries:
+  cognitive-services-speech-onpremise:
+  - apiVersion: v1
+    appVersion: 0.1.1
+    created: "2021-10-07T17:11:00.6692713+02:00"
+    description: A Helm chart for Kubernetes for cognitive service - speech onpremise
+      service
+    digest: be2f81b4d82591ca5917fb09da0c430b85c3bebe2024b85b9c17ac3ec49e235c
+    home: https://docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-howto-on-premises
+    keywords:
+    - speech-to-text
+    - text-to-speech
+    - onpremise
+    - cognitive
+    maintainers:
+    - email: antsu@microsoft.com
+      name: Anthony Su
+    name: cognitive-services-speech-onpremise
+    urls:
+    - https://mysoultan.github.io/helm-chart/cognitive-services-speech-onpremise-0.1.1.tgz
+    version: 0.1.1
+generated: "2021-10-07T17:11:00.6672953+02:00"
