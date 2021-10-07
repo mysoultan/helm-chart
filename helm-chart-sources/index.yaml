@@ -18,6 +18,6 @@ entries:
       name: Anthony Su
     name: cognitive-services-speech-onpremise
     urls:
-    - https://mysoultan.github.io/helm-chart/cognitive-services-speech-onpremise-0.1.1.tgz
+    - https://mysoultan.github.io/helm-chart/helm-chart-sources/cognitive-services-speech-onpremise-0.1.1.tgz
     version: 0.1.1
 generated: "2021-10-07T16:22:07.1341596+02:00"
