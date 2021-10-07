@@ -1,0 +1,45 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speech-to-text
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "speech-to-text.name" .}}
+    chart: {{ template "speech-to-text.chart" .}}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.service.autoScaler.minAvailablePods }}
+  selector:
+    matchLabels:
+      app: {{ template "speech-to-text.name" .}}
+  template:
+    metadata:
+      labels:
+        app: {{ template "speech-to-text.name" .}}
+    spec:
+      containers:
+        - name: speech-to-text-container
+          image: {{ template "image.full" .Values.image }}
+          imagePullPolicy: {{ template "image.pull" .Values.image }}
+          {{- include "image.args" .Values.image.args | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: {{ .Values.service.containerPort }}
+            initialDelaySeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: {{ .Values.service.containerPort }}
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          {{- include "stt.image.resources" .Values | nindent 10 }}
+          {{- include "stt.image.env" .Values | nindent 10 }}
+      imagePullSecrets:
+        {{ template "image.secrets" .Values.image.pullSecrets }}
+{{- end }}

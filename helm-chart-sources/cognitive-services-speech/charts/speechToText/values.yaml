@@ -1,0 +1,61 @@
+# Default values for speech-to-text.
+enabled: false
+
+# How many concurrent requests needed to run speech-to-text service.
+# Default is 2.
+numberOfConcurrentRequest: 2
+
+# This is used to set if service is required to optimize for audio input by files.
+# Default is false.
+optimizeForAudioFile: false
+
+# Image below is ONLY a sample.
+# Please modify the image to your own image direction.
+# Reference: docs.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-container-howto
+image:
+  registry:
+  repository:
+  tag:
+  # A list of secrets used to pull docker image
+  pullSecrets:
+
+  # eula, billing and apikey are required args that user should provide valid values.
+  args:
+    # Indicates that you've accepted the license for the container.
+    # The value of this option must be: accept.
+    eula:
+    # This is used for specify billing endpoint URI.
+    # The billing endpoint URI value is available on the Azure portal's Speech Overview page.
+    billing:
+    # The API key of the Cognitive Service resource used to track billing information.
+    # The value of this option must be set to an API key for the provisioned resource specified in Billing.
+    apikey:
+
+  # pullByHash default is false.
+  # If want to pull docker image by hash, add below two lines:
+  #
+  # hash: "<image_hash_value>"
+  # pullByHash: true
+  #
+  hash:
+  pullByHash: false
+
+service:
+  type: LoadBalancer
+  port: 80
+  containerPort: 5000     # Don't change, fixed port number.
+
+  # Users can put annotations on service.yaml as they want
+  annotations: {}
+  autoScaler:
+    enabled: true
+    name: speech-to-text-autoscaler
+
+    minAvailablePods: 2
+    maxAvailablePods: 10
+
+  podDisruption:
+    enabled: true
+    name: speech-to-text-poddisruptionbudget
+
+    maxUnavailable: 20%

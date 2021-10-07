@@ -1,0 +1,44 @@
+{{- if .Values.enabled }}
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: text-to-speech
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "text-to-speech.name" .}}
+    chart: {{ template "text-to-speech.chart" .}}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.service.autoScaler.minAvailablePods }}
+  selector:
+    matchLabels:
+      app: {{ template "text-to-speech.name" .}}
+  template:
+    metadata:
+      labels:
+        app: {{ template "text-to-speech.name" .}}
+    spec:
+      containers:
+        - name: text-to-speech-container
+          image: {{ template "image.full" .Values.image }}
+          imagePullPolicy: {{ template "image.pull" .Values.image }}
+          {{- include "image.args" .Values.image.args | nindent 10 }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.containerPort }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: {{ .Values.service.containerPort }}
+            initialDelaySeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: {{ .Values.service.containerPort }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          {{- include "tts.image.resources" .Values | nindent 10 }}
+      imagePullSecrets:
+        {{ template "image.secrets" .Values.image.pullSecrets }}
+{{- end }}

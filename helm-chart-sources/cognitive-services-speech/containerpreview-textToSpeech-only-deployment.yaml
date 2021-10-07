@@ -1,0 +1,17 @@
+# These settings are deployment specific and users can provide customizations
+# Below is an example using speech service containers in containerpreview.azurecr.io
+
+# text-to-speech configurations
+# Refer to the charts/textToSpeech/values.yaml
+textToSpeech:
+  enabled: true
+  image:
+    registry: containerpreview.azurecr.io
+    repository: microsoft/cognitive-services-text-to-speech
+    tag: latest
+    pullSecrets:
+      - containerpreview
+    args:
+      eula: accept
+      billing: https://fake.api.cognitive.microsoft.com
+      apikey: dummy

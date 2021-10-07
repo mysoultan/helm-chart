@@ -1,0 +1,48 @@
+{{- if and .Values.speechToText.verification.enabled .Values.speechToText.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: speech-to-text-readiness-test
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: speech-to-text-readiness-test
+      image: {{ template "image.full" .Values.speechToText.verification.image }}
+      env:
+        - name: SPEECH_TO_TEXT_HOST
+          value: speech-to-text
+        - name: SPEECH_TO_TEXT_PORT
+          value: "80"                     # Should be consistent with speech-to-text service port number
+      # Specify arguments as needed
+      {{- if .Values.speechToText.verification.image.arguments -}}
+      {{- $argumentslength := len .Values.speechToText.verification.image.arguments }}
+      args: [ {{- range $index, $argument := .Values.speechToText.verification.image.arguments -}}{{- if $index -}},{{- end -}}{{ $argument | quote }} {{- end -}} ]
+      {{- end }}
+  restartPolicy: Never
+{{- end }}
+
+---
+{{- if and .Values.textToSpeech.verification.enabled .Values.textToSpeech.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: text-to-speech-readiness-test
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: text-to-speech-readiness-test
+      image: {{ template "image.full" .Values.textToSpeech.verification.image }}
+      env:
+        - name: TEXT_TO_SPEECH_HOST
+          value: text-to-speech
+        - name: TEXT_TO_SPEECH_PORT
+          value: "80"
+      # Specify arguments as needed
+      {{- if .Values.textToSpeech.verification.image.arguments -}}
+      {{- $argumentslength := len .Values.textToSpeech.verification.image.arguments }}
+      args: [ {{- range $index, $argument := .Values.textToSpeech.verification.image.arguments -}}{{- if $index -}},{{- end -}}{{ $argument | quote }} {{- end -}} ]
+      {{- end }}
+  restartPolicy: Never
+{{- end }}

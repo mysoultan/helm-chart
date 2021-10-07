@@ -1,0 +1,36 @@
+# These settings are deployment specific and users can provide customizations
+# Below is an example using skyman acr
+
+# speech-to-text configurations
+# Refer to the charts/speechToText/values.yaml
+speechToText:
+  enabled: true
+  numberOfConcurrentRequest: 3
+  optimizeForAudioFile: true
+  image:
+    registry: containerpreview.azurecr.io
+    repository: microsoft/cognitive-services-speech-to-text
+    tag: latest
+    pullSecrets:
+      - containerpreview
+    args:
+      eula: accept
+      billing: https://fake.api.cognitive.microsoft.com
+      apikey: dummy
+
+# text-to-speech configurations
+# Refer to the charts/textToSpeech/values.yaml
+textToSpeech:
+  enabled: true
+  numberOfConcurrentRequest: 3
+  optimizeForTurboMode: false
+  image:
+    registry: containerpreview.azurecr.io
+    repository: microsoft/cognitive-services-text-to-speech
+    tag: latest
+    pullSecrets:
+      - containerpreview
+    args:
+      eula: accept
+      billing: https://fake.api.cognitive.microsoft.com
+      apikey: dummy

@@ -1,0 +1,16 @@
+{{- if and .Values.enabled .Values.service.podDisruption.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Values.service.podDisruption.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "text-to-speech.name" .}}
+    chart: {{ template "text-to-speech.chart" .}}
+    release: {{ .Release.Name }}
+spec:
+  maxUnavailable: {{ .Values.service.podDisruption.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ template "text-to-speech.name" .}}
+{{- end }}

@@ -1,0 +1,9 @@
+apiVersion: v1
+appVersion: "1.1"
+description: A Helm chart for Kubernetes deployment of text-to-speech
+keywords:
+- text-to-speech
+- on-prem
+- speech
+name: textToSpeech
+version: 0.1.1

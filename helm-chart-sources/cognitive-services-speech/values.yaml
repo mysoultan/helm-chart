@@ -1,0 +1,45 @@
+# Top level speech-onprem values file has the following sections.
+#
+# chart sections: Every subdirectory inside the charts/ directory has a top level
+#       configuration key in this file. This file overrides the values specified
+#       by the charts/${chartname}/values.yaml.
+#       Check the chart level values file for exhaustive list of configuration options..
+
+# speech-to-text configurations
+# Refer to the charts/speechToText/values.yaml
+speechToText:
+  enabled: false
+
+  # Values used for "helm test", staying with speech-onprem/values.yaml
+  verification:
+    enabled: true
+    image:
+      registry: docker.io
+      repository: antsu/on-prem-client
+      tag: latest
+      pullByHash: false
+      arguments:
+        - "./speech-to-text-client"
+        - "./audio/whatstheweatherlike.wav"
+        - "--expect=What's the weather like"
+        - "--host=$(SPEECH_TO_TEXT_HOST)"
+        - "--port=$(SPEECH_TO_TEXT_PORT)"
+
+# text-to-speech configurations
+# Refer to the charts/textToSpeech/values.yaml
+textToSpeech:
+  enabled: false
+
+  # Values used for "helm test", staying with speech-onprem/values.yaml
+  verification:
+    enabled: true
+    image:
+      registry: docker.io
+      repository: antsu/on-prem-client
+      tag: latest
+      pullByHash: false
+      arguments:
+        - "./text-to-speech-client"
+        - "--input='What's the weather like'"
+        - "--host=$(TEXT_TO_SPEECH_HOST)"
+        - "--port=$(TEXT_TO_SPEECH_PORT)"

@@ -1,0 +1,26 @@
+{{- if and .Values.enabled .Values.service.autoScaler.enabled }}
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.service.autoScaler.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "speech-to-text.name" .}}
+    chart: {{ template "speech-to-text.chart" .}}
+    release: {{ .Release.Name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: speech-to-text
+  minReplicas: {{ .Values.service.autoScaler.minAvailablePods }}
+  maxReplicas: {{ .Values.service.autoScaler.maxAvailablePods }}
+
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+{{- end }}

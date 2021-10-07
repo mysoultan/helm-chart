@@ -1,0 +1,26 @@
+{{- if .Values.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: speech-to-text
+  namespace: {{ .Release.Namespace }}
+  {{- if .Values.service.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.service.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
+  labels:
+    app: {{ template "speech-to-text.name" .}}
+    chart: {{ template "speech-to-text.chart" .}}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.containerPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "speech-to-text.name" .}}
+{{- end }}
